@@ -21,7 +21,6 @@ import butterknife.ButterKnife;
 
 public class TestScrollActivity extends AppCompatActivity {
 
-
     private float totalHeight;      //总高度
     private float toolBarHeight;    //toolBar高度
     private float offSetHeight;     //总高度 -  toolBar高度  布局位移值
@@ -60,6 +59,9 @@ public class TestScrollActivity extends AppCompatActivity {
         toolBarHeight = getResources().getDimension(R.dimen.tool_bar_height);
         offSetHeight = totalHeight - toolBarHeight;
 
+        /**
+         *   移动效果值／最终效果值 =  移动距离／ 能移动总距离（确定）
+         */
         appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {

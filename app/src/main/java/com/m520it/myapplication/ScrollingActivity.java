@@ -43,6 +43,10 @@ public class ScrollingActivity extends AppCompatActivity {
         final float screenW = getResources().getDisplayMetrics().widthPixels;
         final float toolbarHeight = getResources().getDimension(R.dimen.tool_bar_height);
         final float initHeight = getResources().getDimension(R.dimen.app_bar_height);
+
+        /**
+         *   移动效果值／最终效果值 =  移动距离／ 能移动总距离（确定）
+         */
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
