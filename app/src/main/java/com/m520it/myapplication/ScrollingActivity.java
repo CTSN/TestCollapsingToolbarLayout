@@ -27,11 +27,11 @@ public class ScrollingActivity extends AppCompatActivity {
     @BindView(R.id.tv_search)
     TextView tvSearch;
 
-    private float mSelfHeight = 0;//用以判断是否得到正确的宽高值
-    private float mTitleScale;
-    private float mTestScaleY;
-    private float mTestScaleX;
-    private float mHeadImgScale;
+    private float mSelfHeight = 0;  //用以判断是否得到正确的宽高值
+    private float mTitleScale;      //标题缩放值
+    private float mTestScaleY;      //测试按钮y轴缩放值
+    private float mTestScaleX;      //测试按钮x轴缩放值
+    private float mHeadImgScale;    //头像缩放值
 
 
     @Override
