@@ -29,8 +29,8 @@ public class ScrollingActivity extends AppCompatActivity {
 
     private float mSelfHeight = 0;//用以判断是否得到正确的宽高值
     private float mTitleScale;
-    private float mSubScribeScale;
-    private float mSubScribeScaleX;
+    private float mTestScaleY;
+    private float mTestScaleX;
     private float mHeadImgScale;
 
 
@@ -48,19 +48,25 @@ public class ScrollingActivity extends AppCompatActivity {
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (mSelfHeight == 0) {
 
+                    //获取标题高度
                     mSelfHeight = mTitle.getHeight();
 
+                    //得到标题的高度差
                     float distanceTitle = mTitle.getTop() - (toolbarHeight - mTitle.getHeight()) / 2.0f;
-                    float distanceSubscribe = test.getY() - (toolbarHeight - test.getHeight()) / 2.0f;
+                    //得到测试按钮的高度差
+                    float distanceTest = test.getY() - (toolbarHeight - test.getHeight()) / 2.0f;
+                    //得到图片的高度差
                     float distanceHeadImg = mHeadImage.getY() - (toolbarHeight - mHeadImage.getHeight()) / 2.0f;
+                    //得到测试按钮的水平差值  屏幕宽度一半 - 按钮宽度一半
                     float distanceSubscribeX = screenW / 2.0f - (test.getWidth() / 2.0f);
 
+                    //得到高度差缩放比值  高度差／能滑动总长度 以此类推
                     mTitleScale = distanceTitle / (initHeight - toolbarHeight);
-                    mSubScribeScale = distanceSubscribe / (initHeight - toolbarHeight);
+                    mTestScaleY = distanceTest / (initHeight - toolbarHeight);
                     mHeadImgScale = distanceHeadImg / (initHeight - toolbarHeight);
-                    mSubScribeScaleX = distanceSubscribeX / (initHeight - toolbarHeight);
+                    mTestScaleX = distanceSubscribeX / (initHeight - toolbarHeight);
                 }
-
+                //得到文本框、头像缩放值 不透明 ->透明  文本框x跟y缩放
                 float scale = 1.0f - (-verticalOffset) / (initHeight - toolbarHeight);
 
                 tvSearch.setScaleX(scale);
@@ -69,12 +75,13 @@ public class ScrollingActivity extends AppCompatActivity {
 
                 mHeadImage.setScaleX(scale);
                 mHeadImage.setScaleY(scale);
+                //设置头像y轴平移
                 mHeadImage.setTranslationY(mHeadImgScale * verticalOffset);
-
+                //设置标题y轴平移
                 mTitle.setTranslationY(mTitleScale * verticalOffset);
-
-                test.setTranslationY(mSubScribeScale * verticalOffset);
-                test.setTranslationX(-mSubScribeScaleX * verticalOffset);
+                //设置测试按钮x跟y平移
+                test.setTranslationY(mTestScaleY * verticalOffset);
+                test.setTranslationX(-mTestScaleX * verticalOffset);
             }
         });
 
