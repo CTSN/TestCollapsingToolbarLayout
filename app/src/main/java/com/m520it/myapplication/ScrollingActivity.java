@@ -1,9 +1,11 @@
 package com.m520it.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,8 +22,8 @@ public class ScrollingActivity extends AppCompatActivity {
     ImageView mHeadImage;
     @BindView(R.id.subscription_title)
     TextView mTitle;
-    @BindView(R.id.subscribe)
-    TextView mSubscribe;
+    @BindView(R.id.test)
+    TextView test;
     @BindView(R.id.tv_search)
     TextView tvSearch;
 
@@ -49,9 +51,9 @@ public class ScrollingActivity extends AppCompatActivity {
                     mSelfHeight = mTitle.getHeight();
 
                     float distanceTitle = mTitle.getTop() - (toolbarHeight - mTitle.getHeight()) / 2.0f;
-                    float distanceSubscribe = mSubscribe.getY() - (toolbarHeight - mSubscribe.getHeight()) / 2.0f;
+                    float distanceSubscribe = test.getY() - (toolbarHeight - test.getHeight()) / 2.0f;
                     float distanceHeadImg = mHeadImage.getY() - (toolbarHeight - mHeadImage.getHeight()) / 2.0f;
-                    float distanceSubscribeX = screenW / 2.0f - (mSubscribe.getWidth() / 2.0f);
+                    float distanceSubscribeX = screenW / 2.0f - (test.getWidth() / 2.0f);
 
                     mTitleScale = distanceTitle / (initHeight - toolbarHeight);
                     mSubScribeScale = distanceSubscribe / (initHeight - toolbarHeight);
@@ -71,8 +73,15 @@ public class ScrollingActivity extends AppCompatActivity {
 
                 mTitle.setTranslationY(mTitleScale * verticalOffset);
 
-                mSubscribe.setTranslationY(mSubScribeScale * verticalOffset);
-                mSubscribe.setTranslationX(-mSubScribeScaleX * verticalOffset);
+                test.setTranslationY(mSubScribeScale * verticalOffset);
+                test.setTranslationX(-mSubScribeScaleX * verticalOffset);
+            }
+        });
+
+        test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ScrollingActivity.this,TestScrollActivity.class));
             }
         });
     }

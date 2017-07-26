@@ -13,14 +13,25 @@
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
+            android:fitsSystemWindows="true"
             android:layout_height="@dimen/app_bar_height">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-                app:statusBarScrim="@color/colorPrimary">
+                app:contentScrim="?attr/colorPrimary"
+                android:fitsSystemWindows="true"
+                app:statusBarScrim="@android:color/transparent">
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/ic_launcher"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7"
+                    android:fitsSystemWindows="true"/>
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -72,14 +83,15 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/subscribe"
+            android:id="@+id/test"
             android:layout_width="75dp"
             android:layout_height="24dp"
             android:background="#000"
             android:button="@null"
             android:checked="false"
             android:gravity="center"
-            android:text="订阅"
+            android:text="测试"
+            android:clickable="true"
             android:textColor="#fff" />
     </LinearLayout>
 </FrameLayout>
