@@ -10,7 +10,9 @@
 知道大概效果，开始撸代码。
 
 首先我们先熟悉下Material Design折叠栏的效果是怎样的。
+
 ###准备工作
+
 ####相关控件了解
 
 在创建activity的时候，android studio提供了一个叫ScrollingActivity的模版
