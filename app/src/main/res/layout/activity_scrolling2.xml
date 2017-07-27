@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fl"
+    android:background="#fff"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -48,6 +49,7 @@
 
 
     </android.support.design.widget.CoordinatorLayout>
+    <!-- 搜索框布局-->
     <RelativeLayout
         android:id="@+id/ll"
         android:layout_width="match_parent"

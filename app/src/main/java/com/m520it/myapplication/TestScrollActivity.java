@@ -74,9 +74,9 @@ public class TestScrollActivity extends AppCompatActivity {
                     //算出高度偏移量比值  相对与llHeight
                     llHeightOffScale = 1.0f - (toolBarHeight / llHeight);
 
-                    //得到高度差值 就是布局marginTop
+                    //得到滑动差值 就是布局marginTop
                     llOffDistance = params.topMargin;
-                    //得到高度差缩放比值
+                    //得到滑动比值
                     llOffDistanceScale = llOffDistance / offSetHeight;
                 }
 
@@ -85,7 +85,7 @@ public class TestScrollActivity extends AppCompatActivity {
 
                 //获取高度缩放值
                 float llHeightScale = 1.0f-(llHeightOffScale*((-verticalOffset)/offSetHeight));
-
+                //计算maigintop值
                 float distance = llOffDistance - (-verticalOffset)*llOffDistanceScale;
 
                 image.setAlpha(1.0f-alphaScale);
