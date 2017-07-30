@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
@@ -13,7 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -63,6 +62,8 @@ public class MyRectCircleEditText extends ViewGroup {
     private float d_x;  //记录角度变化比
 
     private onScollListener listener;
+    private onClickListener onClickListener;
+    private boolean canClick = true;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -309,5 +310,45 @@ public class MyRectCircleEditText extends ViewGroup {
 
     public interface onScollListener {
         void onScroll(boolean isAdd, MyRectCircleEditText v);
+    }
+
+    public interface onClickListener{
+        void onClick(View view);
+    }
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                canClick = judgeCanClick(event.getX(),event.getY());
+                if (!canClick)
+                    return super.onTouchEvent(event);
+                break;
+            case MotionEvent.ACTION_UP:
+                if (onClickListener != null && canClick){
+                    onClickListener.onClick(this);
+                }
+                break;
+        }
+        return true;
+    }
+
+
+    private boolean judgeCanClick(float x, float y) {
+        boolean click = false;
+        if (isAdd){
+            click = true;
+        }else{
+            if(x<center*2 && y<center*2){
+                click = true;
+            }else{
+                click = false;
+            }
+        }
+        return click;
+    }
+
+
+    public void setOnClickListener(MyRectCircleEditText.onClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 }

@@ -10,6 +10,8 @@
     tools:showIn="@layout/activity_test_my_rect">
 
     <TextView
+        android:id="@+id/tv_text"
+        android:clickable="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"

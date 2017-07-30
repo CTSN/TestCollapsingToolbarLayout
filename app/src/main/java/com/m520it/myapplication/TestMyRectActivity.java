@@ -6,10 +6,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +30,8 @@ public class TestMyRectActivity extends AppCompatActivity {
     MyRectCircleEditText text;
     @BindView(R.id.fl)
     NestedScrollView fl;
+    @BindView(R.id.tv_text)
+    TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +49,12 @@ public class TestMyRectActivity extends AppCompatActivity {
             }
         });
 
-        text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(TestMyRectActivity.this,ScrollingActivity.class));
-            }
-        });
+       text.setOnClickListener(new MyRectCircleEditText.onClickListener() {
+           @Override
+           public void onClick(View view) {
+               startActivity(new Intent(TestMyRectActivity.this,ScrollingActivity.class));
+           }
+       });
         appBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
