@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <com.m520it.myapplication.MyCircle
+        android:id="@+id/circle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:circle_color="@color/colorAccent" />
+
+
+    <com.m520it.myapplication.MyRectCircleEditText
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:inner_circle_color="@color/black"
+        app:bac_color="#fff"
+        app:close_icon="@mipmap/icon_2"
+        app:open_icon="@mipmap/icon"
+        app:text="地铁／景区／商圈／地铁"
+        app:text_size="16"
+        app:text_color="@color/black"
+        app:speed="80"
+        android:layout_margin="10dp"/>
+
+
+</LinearLayout>

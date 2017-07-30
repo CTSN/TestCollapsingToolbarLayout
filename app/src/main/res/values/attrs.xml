@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MyCircle">
+        <attr name="circle_color"  format="color"/>
+        <attr name="circle_innerWidth" format="dimension"/>
+        <attr name="circle_width" format="dimension"/>
+    </declare-styleable>
+    
+    <declare-styleable name="MyRectCircleEditText">
+        <attr name="text_size" format="float"/>
+        <attr name="speed" format="float"/>
+        <attr name="bac_color" format="color"/>
+        <attr name="text_color" format="color"/>
+        <attr name="inner_circle_color" format="color"/>
+        <attr name="text" format="string"/>
+        <attr name="open_icon" format="reference"/>
+        <attr name="close_icon" format="reference"/>
+    </declare-styleable>
+</resources>

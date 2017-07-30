@@ -1,5 +1,9 @@
 package com.m520it.myapplication;
 
+import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -8,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -59,6 +64,13 @@ public class TestScrollActivity extends AppCompatActivity {
         toolBarHeight = getResources().getDimension(R.dimen.tool_bar_height);
         offSetHeight = totalHeight - toolBarHeight;
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(TestScrollActivity.this,TestActivity.class));
+            }
+        });
+
         /**
          *   移动效果值／最终效果值 =  移动距离／ 能移动总距离（确定）
          */
@@ -94,6 +106,7 @@ public class TestScrollActivity extends AppCompatActivity {
                 params.setMargins(0,(int)distance,0,0);
 
                 fl.requestLayout();
+
 
 
             }
