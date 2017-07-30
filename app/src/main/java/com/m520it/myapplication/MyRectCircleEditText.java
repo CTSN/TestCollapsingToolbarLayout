@@ -27,11 +27,11 @@ public class MyRectCircleEditText extends ViewGroup {
     private int circleColor;
     private int textColor;
     private float textSize;
-    private String text="";
+    private String text = "";
     private float speed;
 
-    private final static int IS_SLIDE_MINUS = 0;  //递减状态
-    private final static int IS_SLIDE_ADD = 1;     //递增状态
+    private final static int IS_SLIDE_DECREASE = 0;  //递减状态
+    private final static int IS_SLIDE_INCREASE = 1;     //递增状态
 
     private MyRectCircleEditText view;
     private int width;          //控件宽度
@@ -40,29 +40,28 @@ public class MyRectCircleEditText extends ViewGroup {
     private View chidView;
     int cWidth;         //文本宽度
     int cHeight;        //文本高度
-    float cX;             //记录文本递减值
-    float cX_x;            //记录宽度递减比
+    float tX;             //记录文本递减值
+    float tX_x;            //记录宽度递减比
 
     private float center;       //左圆心x y  半径
     private float x; //矩形长度
     private float circle; //小圆的半径；
     private float y = 20; //圆环宽度
-
     private float y_x; //圆环宽度变化比；
 
-    private boolean isAdd = true;       //记录是否是递增状态
+    private boolean isIncrease = true;       //记录是否是递增状态
     private boolean isScroll = false;   //记录是否正在滑动
 
     private Paint paint;        //画笔
     private RectF rectF;        //矩形范围
 
-    private Bitmap iconBit, iconBit2;
-    private float iconWidth;
-    private float degress;
+    private Bitmap iconBit, iconBit2;   //小图标
+    private float iconWidth;    //图标宽度
+    private float degrees;  //图标旋转角度
     private float d_x;  //记录角度变化比
 
-    private onScollListener listener;
-    private onClickListener onClickListener;
+    private onScrollListener listener;   //动画完成监听
+    private onClickListener onClickListener;    //点击事件监听
     private boolean canClick = true;
 
     private Handler mHandler = new Handler() {
@@ -70,87 +69,81 @@ public class MyRectCircleEditText extends ViewGroup {
         public void handleMessage(Message msg) {
 
             switch (msg.what) {
-                case IS_SLIDE_MINUS:
-                    // TODO: 2017/7/30 设置速率
+                case IS_SLIDE_DECREASE:
                     x -= speed;
                     if (x >= center + speed) {
                         isScroll = true;
                         //根据圆环宽度比得到小圆半径
                         circle = y_x * (width - center - x) + center - y;
-                        degress = -45 + d_x * x;
-
-                        mHandler.sendEmptyMessageDelayed(IS_SLIDE_MINUS, 1);
+                        //根据角度比值 计算旋转角度
+                        degrees = -45 + d_x * x;
+                        mHandler.sendEmptyMessageDelayed(IS_SLIDE_DECREASE, 1);
                     } else {
                         //动画结束 恢复默认状态
                         x = center;
                         circle = center;
-                        degress = -45;
-
+                        degrees = -45;
                         isScroll = false;
                         setEnabled(true);
                         //动画完成回调
-                        if (listener !=null) {
-                            listener.onScroll(isAdd, view);
+                        if (listener != null) {
+                            listener.onScroll(isIncrease, view);
                         }
                     }
                     break;
-                case IS_SLIDE_ADD:
+                case IS_SLIDE_INCREASE:
                     x += speed;
                     if (x < width - center) {
                         isScroll = true;
                         //根据圆环宽度比得到小圆半径
                         circle = center - y_x * x;
-
-                        degress = -45 + d_x * x;
-                        mHandler.sendEmptyMessageDelayed(IS_SLIDE_ADD, 1);
+                        //根据角度比值 计算旋转角度
+                        degrees = -45 + d_x * x;
+                        mHandler.sendEmptyMessageDelayed(IS_SLIDE_INCREASE, 1);
                     } else {
                         //动画结束 恢复默认状态
                         x = width - center;
                         circle = center - y;
-
-                        degress = 0;
+                        degrees = 0;
                         isScroll = false;
                         setEnabled(true);
                         //动画完成回调
-                        if (listener !=null) {
-                            listener.onScroll(isAdd, view);
+                        if (listener != null) {
+                            listener.onScroll(isIncrease, view);
                         }
                     }
-
                     break;
             }
-
-
-            //默认是在距离小圆右侧  cX_x * x 得出的值少了圆的半径 +20设置间距
-            cX = cX_x * x + center + 20;
+            //默认是在距离小圆右侧  tX_x * x 得出的值少了圆的半径 +20设置间距
+            tX = tX_x * x + center + 20;
 
             if (x >= width - center) {
-                cX = cWidth + center * 2 + 20;
+                tX = cWidth + center * 2 + 20;
             }
+
             postInvalidate();
             requestLayout();
         }
     };
 
     public MyRectCircleEditText(Context context) {
-       this(context,null);
+        this(context, null);
     }
 
     public MyRectCircleEditText(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         view = this;
-        init(context,attrs);
+        init(context, attrs);
     }
 
-    private void init(Context context,AttributeSet attrs) {
-        TypedArray type = context.obtainStyledAttributes(attrs,R.styleable.MyRectCircleEditText);
-
-        bacColor = type.getColor(R.styleable.MyRectCircleEditText_bac_color,getResources().getColor(R.color.colorAccent));
-        circleColor = type.getColor(R.styleable.MyRectCircleEditText_inner_circle_color,getResources().getColor(R.color.black));
-        textColor = type.getColor(R.styleable.MyRectCircleEditText_text_color,getResources().getColor(R.color.black));
-        textSize = type.getFloat(R.styleable.MyRectCircleEditText_text_size,20);
+    private void init(Context context, AttributeSet attrs) {
+        TypedArray type = context.obtainStyledAttributes(attrs, R.styleable.MyRectCircleEditText);
+        bacColor = type.getColor(R.styleable.MyRectCircleEditText_bac_color, getResources().getColor(R.color.colorAccent));
+        circleColor = type.getColor(R.styleable.MyRectCircleEditText_inner_circle_color, getResources().getColor(R.color.black));
+        textColor = type.getColor(R.styleable.MyRectCircleEditText_text_color, getResources().getColor(R.color.black));
+        textSize = type.getFloat(R.styleable.MyRectCircleEditText_text_size, 20);
         text = type.getString(R.styleable.MyRectCircleEditText_text);
-        speed = type.getFloat(R.styleable.MyRectCircleEditText_speed,80);
+        speed = type.getFloat(R.styleable.MyRectCircleEditText_speed, 80);
         BitmapDrawable dra = (BitmapDrawable) type.getDrawable(R.styleable.MyRectCircleEditText_open_icon);
         if (dra != null) {
             iconBit = dra.getBitmap();
@@ -166,7 +159,7 @@ public class MyRectCircleEditText extends ViewGroup {
         type.recycle();
 
         TextView tv = new TextView(context);
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         tv.setLayoutParams(params);
         tv.setText(text);
         tv.setTextColor(textColor);
@@ -175,10 +168,6 @@ public class MyRectCircleEditText extends ViewGroup {
 
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setColor(bacColor);
-
-
-        iconWidth = iconBit.getWidth();
-
     }
 
     @Override
@@ -188,35 +177,30 @@ public class MyRectCircleEditText extends ViewGroup {
         if (width == 0) {
             width = MeasureSpec.getSize(widthMeasureSpec);
             height = MeasureSpec.getSize(heightMeasureSpec);
-            //圆半径
+
             center = height / 2;
             //初始化默认矩形长度
             x = width - center;
-
             //小圆半径
             circle = center - y;
             //圆环宽度递减比值
             y_x = y / x;
-
+            //初始化小图标相关变量
             iconWidth = circle - 5;
-            iconBit = TextMesureUtil.zoomImg(iconBit,(int)circle-5,(int)circle-5);
-            iconBit2 = TextMesureUtil.zoomImg(iconBit2,(int)circle-5,(int)circle-5);
-
-            degress = 0;
+            iconBit = TextMesureUtil.zoomImg(iconBit, (int) circle - 5, (int) circle - 5);
+            iconBit2 = TextMesureUtil.zoomImg(iconBit2, (int) circle - 5, (int) circle - 5);
+            degrees = 0;
             d_x = 45 / x;
-
             //获取子控件
-            for (int i = 0; i < getChildCount(); i++) {
-                View child = this.getChildAt(i);
-                measureChild(child, widthMeasureSpec, heightMeasureSpec);
-                cWidth = child.getMeasuredWidth();
-                cHeight = child.getMeasuredHeight();
-                //初始化文本右下角 x坐标  + 10设置间距
-                cX = cWidth + center * 2 + 10;
+            View child = this.getChildAt(0);
+            measureChild(child, widthMeasureSpec, heightMeasureSpec);
+            cWidth = child.getMeasuredWidth();
+            cHeight = child.getMeasuredHeight();
+            //初始化文本范围右下角 x坐标  +10设置间距
+            tX = cWidth + center * 2 + 10;
 
-                //文本宽度递减比
-                cX_x = (cX - center * 2 - 5) / (width - center * 2);
-            }
+            //文本宽度递减比
+            tX_x = (tX - center * 2 - 5) / (width - center * 2);
         }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
@@ -246,11 +230,11 @@ public class MyRectCircleEditText extends ViewGroup {
         //画图片
         canvas.save();
 
-        if (degress == -45.0) {
-            canvas.rotate(degress - 45, center, center);
+        if (degrees == -45.0) {
+            canvas.rotate(degrees - 45, center, center);
             canvas.drawBitmap(iconBit2, center - iconWidth / 2, center - iconWidth / 2, paint);
         } else {
-            canvas.rotate(degress, center, center);
+            canvas.rotate(degrees, center, center);
             canvas.drawBitmap(iconBit, center - iconWidth / 2, center - iconWidth / 2, paint);
         }
 
@@ -262,69 +246,73 @@ public class MyRectCircleEditText extends ViewGroup {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         chidView = getChildAt(0);
 
-        chidView.layout((int) (center * 2 + 5), (int) (center - cHeight / 2), (int) cX, (int) (center - cHeight / 2 + cHeight));
+        chidView.layout((int) (center * 2 + 5), (int) (center - cHeight / 2), (int) tX, (int) (center - cHeight / 2 + cHeight));
 
     }
 
-    //递减状态
-    public void startSlide() {
-        //滑动时不给点击事件
-        setEnabled(false);
-
-        isAdd = false;
-        mHandler.sendEmptyMessageDelayed(IS_SLIDE_MINUS, 40);
-    }
-
-    //递增状态
-    public void reSet() {
-        //滑动时不给点击事件
-        setEnabled(false);
-        isAdd = true;
-        mHandler.sendEmptyMessageDelayed(IS_SLIDE_ADD, 40);
-    }
-
-    public boolean isAdd() {
-        return isAdd;
+    public boolean isIncrease() {
+        return isIncrease;
     }
 
     public boolean isScroll() {
         return isScroll;
     }
 
+    //递减状态
+    public void startDecrease() {
+        //滑动时不给点击事件
+        setEnabled(false);
+
+        isIncrease = false;
+        mHandler.sendEmptyMessageDelayed(IS_SLIDE_DECREASE, 40);
+    }
+
+    //递增状态
+    public void startIncrease() {
+        //滑动时不给点击事件
+        setEnabled(false);
+        isIncrease = true;
+        mHandler.sendEmptyMessageDelayed(IS_SLIDE_INCREASE, 40);
+    }
+
     //开启动画
     public void startScroll() {
         if (!isScroll) {
-
-            if (isAdd) {
-                startSlide();
+            if (isIncrease) {
+                startDecrease();
             } else {
-                reSet();
+                startIncrease();
             }
 
         }
     }
 
-    public void setListener(onScollListener listener) {
+    public interface onScrollListener {
+        void onScroll(boolean isIncrease, MyRectCircleEditText v);
+    }
+
+    public interface onClickListener {
+        void onClick(View view);
+    }
+
+    public void setListener(onScrollListener listener) {
         this.listener = listener;
     }
 
-    public interface onScollListener {
-        void onScroll(boolean isAdd, MyRectCircleEditText v);
+    public void setOnClickListener(MyRectCircleEditText.onClickListener onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
-    public interface onClickListener{
-        void onClick(View view);
-    }
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        switch (event.getAction()){
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                canClick = judgeCanClick(event.getX(),event.getY());
+                canClick = judgeCanClick(event.getX(), event.getY());
                 if (!canClick)
                     return super.onTouchEvent(event);
                 break;
             case MotionEvent.ACTION_UP:
-                if (onClickListener != null && canClick){
+                if (onClickListener != null && canClick) {
                     onClickListener.onClick(this);
                 }
                 break;
@@ -332,23 +320,23 @@ public class MyRectCircleEditText extends ViewGroup {
         return true;
     }
 
-
+    /**
+     * 确定点击范围 区分两种 展开区域为整个控件 不展开点击区域为圆形
+     * @param x
+     * @param y
+     * @return
+     */
     private boolean judgeCanClick(float x, float y) {
-        boolean click = false;
-        if (isAdd){
+        boolean click;
+        if (isIncrease) {
             click = true;
-        }else{
-            if(x<center*2 && y<center*2){
+        } else {
+            if (x < center * 2 && y < center * 2) {
                 click = true;
-            }else{
+            } else {
                 click = false;
             }
         }
         return click;
-    }
-
-
-    public void setOnClickListener(MyRectCircleEditText.onClickListener onClickListener) {
-        this.onClickListener = onClickListener;
     }
 }

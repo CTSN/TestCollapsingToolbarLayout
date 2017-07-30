@@ -18,7 +18,8 @@ public class TestMyRectActivity extends AppCompatActivity {
 
     private float llOffDistance;
     private FrameLayout.LayoutParams params;
-    private boolean isUp = false,isDown = false;
+    private boolean isUp = false;   //判断是否为上滑状态
+    private boolean isDown = false; //判断是否为下拉状态
     private int i=0;
 
 
@@ -39,10 +40,10 @@ public class TestMyRectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test_my_rect);
         ButterKnife.bind(this);
 
-        text.setListener(new MyRectCircleEditText.onScollListener() {
+        text.setListener(new MyRectCircleEditText.onScrollListener() {
             @Override
-            public void onScroll(boolean isAdd, MyRectCircleEditText v) {
-                if (isAdd)
+            public void onScroll(boolean isIncrease, MyRectCircleEditText v) {
+                if (isIncrease)
                     isUp = true;
                 else
                     isDown = true;
@@ -71,29 +72,27 @@ public class TestMyRectActivity extends AppCompatActivity {
                     isDown = true;
                 }
 
-
                 float distance = llOffDistance + verticalOffset;
+                //滑倒顶端状态 保持20的间距
                 if (distance <= 20) {
                     distance = 20;
-                    startScoll();
+                    startScroll();
                 }
-
+                //滑倒底端状态
                 if (verticalOffset == 0){
-                    if (isDown && !text.isAdd()) {
+                    if (isDown && !text.isIncrease()) {
                         text.startScroll();
                     }
                 }
                 params.topMargin = (int) distance;
                 fl.requestLayout();
-
-
             }
         });
 
 
     }
 
-    public void startScoll() {
+    public void startScroll() {
         if (isUp) {
             isUp = false;
             if (!text.isScroll())

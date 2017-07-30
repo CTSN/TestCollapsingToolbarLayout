@@ -3,7 +3,6 @@ package com.m520it.myapplication;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -22,17 +21,14 @@ public class TestActivity extends AppCompatActivity{
 
         final MyRectCircleEditText text = (MyRectCircleEditText)findViewById(R.id.text);
 
-
-//        text.setTranslationX(0.3f);
-//        text.startScroll();
-        text.setOnClickListener(new View.OnClickListener() {
+        text.setOnClickListener(new MyRectCircleEditText.onClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 text.startScroll();
             }
         });
 
-        text.setListener(new MyRectCircleEditText.onScollListener() {
+        text.setListener(new MyRectCircleEditText.onScrollListener() {
             @Override
             public void onScroll(boolean isAdd, MyRectCircleEditText v) {
             }
